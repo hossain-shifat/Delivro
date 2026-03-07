@@ -11,12 +11,19 @@ import {
 } from "react-native";
 import { BANNERS } from "@/assets/assets";
 import { useRouter } from "expo-router";
+import { CATEGORIES } from "@/constants";
+import CategoryItem from "@/components/CategoryItem";
 
 const { width } = Dimensions.get("window");
 
 export default function Home() {
     const router = useRouter();
     const [activeBannerIndex, setActiveBannerIndex] = useState(0);
+
+    const categories = [
+        { id: "all", name: "All", icon: "grid" },
+        ...CATEGORIES,
+    ];
 
     return (
         <SafeAreaView className="flex-1" edges={["top"]}>
@@ -46,7 +53,7 @@ export default function Home() {
                         {BANNERS.map((banner, index) => (
                             <View
                                 key={index}
-                                className="relative w-full h-48 bg-gray-200 overflow-hidden"
+                                className="relative w-full h-48 bg-gray-200 "
                                 style={{ width: width - 32 }}
                             >
                                 <Image
@@ -80,6 +87,38 @@ export default function Home() {
                             />
                         ))}
                     </View>
+                </View>
+
+                {/* categories */}
+                <View className="mb-6">
+                    <View className="flex-row justify-between items-center mb-4">
+                        <Text className="text-xl font-bold text-primary">
+                            Categories
+                        </Text>
+                    </View>
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {categories.map((cat: any) => (
+                            <CategoryItem
+                                key={cat.id}
+                                item={cat}
+                                isSelected={false}
+                                onPress={() =>
+                                    router.push({
+                                        pathname: "/shop",
+                                        params: {
+                                            category:
+                                                cat.id === "all"
+                                                    ? ""
+                                                    : cat.name,
+                                        },
+                                    })
+                                }
+                            />
+                        ))}
+                    </ScrollView>
                 </View>
             </ScrollView>
         </SafeAreaView>
