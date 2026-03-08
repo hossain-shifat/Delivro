@@ -159,6 +159,8 @@ export default function Home() {
                         </View>
                     )}
                 </View>
+                {/* news latter cta */}
+                <View
             </ScrollView>
         </SafeAreaView>
     );
