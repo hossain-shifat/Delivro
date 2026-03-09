@@ -85,41 +85,41 @@ export default function ProductDetails() {
                             />
                         ))}
                     </ScrollView>
+                    {/* header action */}
+                    <View className="absolute top-12 left-4 right-4 flex-row justify-between items-center z-10">
+                        <TouchableOpacity
+                            className="w-10 h-10 bg-white/80 rounded-full justify-center items-center"
+                            onPress={() => router.back()}
+                        >
+                            <Ionicons
+                                name="arrow-back"
+                                size={24}
+                                color={COLORS.primary}
+                            />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            className="w-10 h-10 bg-white/80 rounded-full justify-center items-center"
+                            onPress={() => toggleWishlist(product)}
+                        >
+                            <Ionicons
+                                name={isLiked ? "heart" : "heart-outline"}
+                                size={24}
+                                color={isLiked ? COLORS.accent : COLORS.primary}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    {/* Pagination dots */}
+                    <View className="absolute bottom-4 left-0 right-0 flex-row justify-center gap-2">
+                        {product.images?.map((_, index) => (
+                            <View
+                                key={index}
+                                className={`h-2 rounded-full ${index === activeImageIndex ? "w-6 bg-primary" : "w-2 bg-gray-300"}`}
+                            />
+                        ))}
+                    </View>
                 </View>
             </ScrollView>
-            {/* header action */}
-            <View className="absolute top-12 left-4 right-4 flex-row justify-between items-center z-10">
-                <TouchableOpacity
-                    className="w-10 h-10 bg-white/80 rounded-full justify-center items-center"
-                    onPress={() => router.back()}
-                >
-                    <Ionicons
-                        name="arrow-back"
-                        size={24}
-                        color={COLORS.primary}
-                    />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    className="w-10 h-10 bg-white/80 rounded-full justify-center items-center"
-                    onPress={() => toggleWishlist(product)}
-                >
-                    <Ionicons
-                        name={isLiked ? "heart" : "heart-outline"}
-                        size={24}
-                        color={isLiked ? COLORS.accent : COLORS.primary}
-                    />
-                </TouchableOpacity>
-            </View>
-            {/* Pagination dots */}
-            <View className="absolute bottom-4 left-0 right-0 flex-row justify-center gap-2">
-                {product.images?.map((_, index) => (
-                    <View
-                        key={index}
-                        className={`h-2 rounded-full ${index === activeImageIndex ? "w-6 bg-primary" : "w-2 bg-gray-300"}`}
-                    />
-                ))}
-            </View>
         </View>
     );
 }
