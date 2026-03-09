@@ -6,6 +6,7 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
+    SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";

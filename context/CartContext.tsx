@@ -82,7 +82,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 clearCart,
                 cartTotal,
                 itemCount,
-                loading
+                loading,
             }}
         >
             {children}
