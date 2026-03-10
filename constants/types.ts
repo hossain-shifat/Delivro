@@ -49,7 +49,12 @@ export interface CartItem {
 }
 
 export type CartItemProps = {
-    item: { id: string; product: { name: string; price: number; images: string[] }; quantity: number; size: string };
+    item: {
+        id: string;
+        product: { name: string; price: number; images: string[] };
+        quantity: number;
+        size: string;
+    };
     onRemove?: () => void;
     onUpdateQuantity?: (newQty: number) => void;
 };
@@ -104,7 +109,12 @@ export interface Order {
     };
     paymentMethod: string;
     paymentStatus: "pending" | "paid" | "failed" | "refunded";
-    orderStatus: "placed" | "processing" | "shipped" | "delivered" | "cancelled";
+    orderStatus:
+        | "placed"
+        | "processing"
+        | "shipped"
+        | "delivered"
+        | "cancelled";
     subtotal: number;
     shippingCost: number;
     tax: number;
