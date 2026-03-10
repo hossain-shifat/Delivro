@@ -1,13 +1,24 @@
 import React, { useState } from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View, Switch, Image, ActivityIndicator, Modal, FlatList, TouchableWithoutFeedback, Platform, } from "react-native";
-import Toast from 'react-native-toast-message';
-import { COLORS } from "@/constants";
+import {
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    Switch,
+    Image,
+    ActivityIndicator,
+    Modal,
+    FlatList,
+    TouchableWithoutFeedback,
+    Platform,
+    View,
+} from "react-native";
+import Toast from "react-native-toast-message";
+import { COLORS, CATEGORIES } from "@/constants";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { CATEGORIES } from "@/constants";
 
 export default function AddProduct() {
-
     const [submitting, setSubmitting] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -40,9 +51,9 @@ export default function AddProduct() {
     const handleSubmit = async () => {
         if (!name || !price || !category || sizes.length < 1) {
             Toast.show({
-                type: 'error',
-                text1: 'Missing Fields',
-                text2: 'Please fill in all required fields'
+                type: "error",
+                text1: "Missing Fields",
+                text2: "Please fill in all required fields",
             });
             return;
         }
@@ -83,12 +94,18 @@ export default function AddProduct() {
                     className="bg-surface p-3 rounded-lg mb-4 flex-row justify-between items-center"
                 >
                     <Text className="text-primary">{category}</Text>
-                    <Ionicons name="chevron-down" size={20} color={COLORS.secondary} />
+                    <Ionicons
+                        name="chevron-down"
+                        size={20}
+                        color={COLORS.secondary}
+                    />
                 </TouchableOpacity>
 
                 {/* CATEGORY MODAL */}
                 <Modal visible={modalVisible} animationType="slide" transparent>
-                    <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                    <TouchableWithoutFeedback
+                        onPress={() => setModalVisible(false)}
+                    >
                         <View className="flex-1 justify-end bg-black/50">
                             <View className="bg-white rounded-t-2xl p-4 max-h-[50%]">
                                 <Text className="text-lg font-bold text-center mb-4">
@@ -100,8 +117,11 @@ export default function AddProduct() {
                                     keyExtractor={(item) => String(item.id)}
                                     renderItem={({ item }) => (
                                         <TouchableOpacity
-                                            className={`p-4 border-b ${category === item.name ? "bg-primary/5" : ""
-                                                }`}
+                                            className={`p-4 border-b ${
+                                                category === item.name
+                                                    ? "bg-primary/5"
+                                                    : ""
+                                            }`}
                                             onPress={() => {
                                                 setCategory(item.name);
                                                 setModalVisible(false);
@@ -109,8 +129,11 @@ export default function AddProduct() {
                                         >
                                             <View className="flex-row justify-between">
                                                 <Text
-                                                    className={`${category === item.name ? "font-bold text-primary" : ""
-                                                        }`}
+                                                    className={`${
+                                                        category === item.name
+                                                            ? "font-bold text-primary"
+                                                            : ""
+                                                    }`}
                                                 >
                                                     {item.name}
                                                 </Text>
@@ -160,7 +183,10 @@ export default function AddProduct() {
 
                 <TouchableOpacity onPress={pickImages} className="mb-4">
                     {images.length > 0 ? (
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                        >
                             {images.map((uri, i) => (
                                 <Image
                                     key={i}
@@ -196,7 +222,9 @@ export default function AddProduct() {
 
                 {/* FEATURED */}
                 <View className="flex-row justify-between items-center mb-6">
-                    <Text className="text-primary font-bold">Featured Product</Text>
+                    <Text className="text-primary font-bold">
+                        Featured Product
+                    </Text>
                     <Switch
                         value={isFeatured}
                         onValueChange={setIsFeatured}
@@ -208,8 +236,9 @@ export default function AddProduct() {
                 <TouchableOpacity
                     onPress={handleSubmit}
                     disabled={submitting}
-                    className={`bg-primary p-4 rounded-xl items-center ${submitting ? "opacity-70" : ""
-                        }`}
+                    className={`bg-primary p-4 rounded-xl items-center ${
+                        submitting ? "opacity-70" : ""
+                    }`}
                 >
                     {submitting ? (
                         <ActivityIndicator color="white" />

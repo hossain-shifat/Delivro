@@ -61,7 +61,7 @@ export default function Checkout() {
             });
         }
         // cash on delivery
-        router.replace("/order");   
+        router.replace("/orders");
     };
 
     useEffect(() => {

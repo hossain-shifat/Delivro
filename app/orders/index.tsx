@@ -1,6 +1,14 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View, ActivityIndicator, ScrollView, Image } from "react-native";
+import {
+    FlatList,
+    Text,
+    TouchableOpacity,
+    View,
+    ActivityIndicator,
+    ScrollView,
+    Image,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
@@ -23,7 +31,7 @@ export default function Orders() {
     }, []);
 
     return (
-        <SafeAreaView className="flex-1 bg-surface" edges={['top']}>
+        <SafeAreaView className="flex-1 bg-surface" edges={["top"]}>
             <Header title="My Orders" showBack />
 
             {loading ? (
@@ -32,7 +40,9 @@ export default function Orders() {
                 </View>
             ) : orders.length === 0 ? (
                 <View className="flex-1 justify-center items-center">
-                    <Text className="text-secondary text-lg">No orders found</Text>
+                    <Text className="text-secondary text-lg">
+                        No orders found
+                    </Text>
                 </View>
             ) : (
                 <FlatList
@@ -45,37 +55,67 @@ export default function Orders() {
                             onPress={() => router.push(`/orders/${item._id}`)}
                         >
                             <View className="flex-row justify-between mb-2">
-                                <Text className="text-primary font-bold">Order #{item.orderNumber}</Text>
-                                <Text className="text-secondary text-sm">{formatDate(item.createdAt)}</Text>
+                                <Text className="text-primary font-bold">
+                                    Order #{item.orderNumber}
+                                </Text>
+                                <Text className="text-secondary text-sm">
+                                    {formatDate(item.createdAt)}
+                                </Text>
                             </View>
 
                             {/* Status Badges */}
                             <View className="flex-row gap-2 mb-3">
-                                <View className={`px-2 py-1 rounded-full ${getStatusColor(item.orderStatus)}`}>
-                                    <Text className={`text-xs font-bold capitalize`}>
+                                <View
+                                    className={`px-2 py-1 rounded-full ${getStatusColor(item.orderStatus)}`}
+                                >
+                                    <Text
+                                        className={`text-xs font-bold capitalize`}
+                                    >
                                         {item.orderStatus}
                                     </Text>
                                 </View>
 
-                                <View className={`px-2 py-1 rounded-full ${item.paymentStatus === 'paid' ? 'bg-green-100' : 'bg-gray-100'
-                                    }`}>
-                                    <Text className={`text-xs font-bold capitalize ${item.paymentStatus === 'paid' ? 'text-green-700' : 'text-gray-700'
-                                        }`}>
+                                <View
+                                    className={`px-2 py-1 rounded-full ${
+                                        item.paymentStatus === "paid"
+                                            ? "bg-green-100"
+                                            : "bg-gray-100"
+                                    }`}
+                                >
+                                    <Text
+                                        className={`text-xs font-bold capitalize ${
+                                            item.paymentStatus === "paid"
+                                                ? "text-green-700"
+                                                : "text-gray-700"
+                                        }`}
+                                    >
                                         {item.paymentStatus}
                                     </Text>
                                 </View>
                             </View>
 
                             <View className="flex-row justify-between items-center mb-2">
-                                <Text className="text-secondary text-xs">Payment Method: <Text className="text-primary font-medium capitalize">{item.paymentMethod}</Text></Text>
+                                <Text className="text-secondary text-xs">
+                                    Payment Method:{" "}
+                                    <Text className="text-primary font-medium capitalize">
+                                        {item.paymentMethod}
+                                    </Text>
+                                </Text>
                             </View>
 
                             {/* Product Images */}
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-3">
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                className="mb-3"
+                            >
                                 {item.items.map((prod: any, idx) => {
                                     const image = prod.product?.images?.[0];
                                     return (
-                                        <View key={idx} className="mr-3 border border-gray-100 rounded-md p-1 bg-gray-50">
+                                        <View
+                                            key={idx}
+                                            className="mr-3 border border-gray-100 rounded-md p-1 bg-gray-50"
+                                        >
                                             {image ? (
                                                 <Image
                                                     source={{ uri: image }}
@@ -84,7 +124,11 @@ export default function Orders() {
                                                 />
                                             ) : (
                                                 <View className="w-12 h-12 bg-gray-200 rounded-md justify-center items-center">
-                                                    <Ionicons name="image-outline" size={20} color={COLORS.secondary} />
+                                                    <Ionicons
+                                                        name="image-outline"
+                                                        size={20}
+                                                        color={COLORS.secondary}
+                                                    />
                                                 </View>
                                             )}
                                         </View>
@@ -93,8 +137,12 @@ export default function Orders() {
                             </ScrollView>
 
                             <View className="flex-row justify-between items-center mt-2 pt-3 border-t border-gray-100">
-                                <Text className="text-secondary">Items: {item.items.length}</Text>
-                                <Text className="text-primary font-bold text-lg">${item.totalAmount.toFixed(2)}</Text>
+                                <Text className="text-secondary">
+                                    Items: {item.items.length}
+                                </Text>
+                                <Text className="text-primary font-bold text-lg">
+                                    ${item.totalAmount.toFixed(2)}
+                                </Text>
                             </View>
                         </TouchableOpacity>
                     )}

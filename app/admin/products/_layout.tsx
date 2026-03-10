@@ -11,9 +11,15 @@ export default function ProductsLayout() {
                 headerShadowVisible: false,
             }}
         >
-            <Stack.Screen name="index" options={{ title: "Manage Products", headerShown: false }} />
+            <Stack.Screen
+                name="index"
+                options={{ title: "Manage Products", headerShown: false }}
+            />
             <Stack.Screen name="add" options={{ title: "Add Product" }} />
-            <Stack.Screen name="edit/[id]" options={{ title: "Edit Product" }} />
+            <Stack.Screen
+                name="edit/[id]"
+                options={{ title: "Edit Product" }}
+            />
         </Stack>
     );
 }
