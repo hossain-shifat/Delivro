@@ -23,14 +23,6 @@ export default function Page() {
     const [loading, setLoading] = React.useState(false);
 
     const onSignInPress = async () => {
-        if (!isLoaded) {
-            Toast.show({
-                type: "error",
-                text1: "Auth not ready",
-                text2: "Please wait a moment and try again",
-            });
-            return;
-        }
         if (!emailAddress || !password) {
             Toast.show({
                 type: "error",
@@ -43,30 +35,40 @@ export default function Page() {
         setLoading(true);
 
         try {
-            const signInAttempt = await signIn.create({
-                identifier: emailAddress,
+            const { error } = await signIn.password({
+                emailAddress,
                 password,
             });
 
-            if (signInAttempt.status === "complete") {
-                await setActive({
-                    session: signInAttempt.createdSessionId,
+            if (error) {
+                throw error;
+            }
+
+            if (signIn.status === "complete") {
+                await signIn.finalize({
+                    navigate: () => {
+                        router.replace("/");
+                    },
                 });
-                router.replace("/");
-            } else if (signInAttempt.status === "needs_second_factor") {
-                const emailCodeFactor =
-                    signInAttempt.supportedSecondFactors?.find(
-                        (factor): factor is EmailCodeFactor =>
-                            factor.strategy === "email_code",
-                    );
+            } else if (
+                signIn.status === "needs_second_factor" ||
+                signIn.status === "needs_client_trust"
+            ) {
+                const emailCodeFactor = signIn.supportedSecondFactors?.find(
+                    (factor): factor is EmailCodeFactor =>
+                        factor.strategy === "email_code",
+                );
 
                 if (emailCodeFactor) {
-                    await signIn.prepareSecondFactor({
-                        strategy: "email_code",
-                        emailAddressId: emailCodeFactor.emailAddressId,
-                    });
+                    await signIn.mfa.sendEmailCode();
                     setShowEmailCode(true);
                 }
+            } else {
+                Toast.show({
+                    type: "error",
+                    text1: "Sign-in incomplete",
+                    text2: `Status: ${signIn.status}`,
+                });
             }
         } catch (err: any) {
             Toast.show({
@@ -80,20 +82,18 @@ export default function Page() {
     };
 
     const onVerifyPress = async () => {
-        if (!isLoaded || !code) return;
+        if (!code) return;
 
         setLoading(true);
         try {
-            const attempt = await signIn.attemptSecondFactor({
-                strategy: "email_code",
-                code,
-            });
+            await signIn.mfa.verifyEmailCode({ code });
 
-            if (attempt.status === "complete") {
-                await setActive({
-                    session: attempt.createdSessionId,
+            if (signIn.status === "complete") {
+                await signIn.finalize({
+                    navigate: () => {
+                        router.replace("/");
+                    },
                 });
-                router.replace("/");
             }
         } catch (err) {
             console.error(err);
