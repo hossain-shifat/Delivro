@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { useRouter, Link } from "expo-router";
-import { useSignUp } from "@clerk/expo";
+import { useSignUp } from "@clerk/expo/legacy";
 
 export default function SignUpScreen() {
     const { isLoaded, signUp, setActive } = useSignUp();
@@ -35,16 +35,17 @@ export default function SignUpScreen() {
 
         setLoading(true);
         try {
-            const { error } = await signUp.password({
+            await signUp.create({
                 emailAddress,
                 password,
+                firstName,
+                lastName,
             });
 
-            if (error) {
-                throw error;
-            }
+            await signUp.prepareEmailAddressVerification({
+                strategy: "email_code",
+            });
 
-            await signUp.verifications.sendEmailCode();
             setPendingVerification(true);
         } catch (err: any) {
             Toast.show({
@@ -58,9 +59,8 @@ export default function SignUpScreen() {
     };
 
     const onVerifyPress = async () => {
-        if (!isLoaded) return;
-
-        if (!code) {
+        const trimmedCode = code.trim();
+        if (!trimmedCode) {
             Toast.show({
                 type: "error",
                 text1: "Missing Fields",
@@ -71,8 +71,8 @@ export default function SignUpScreen() {
 
         setLoading(true);
         try {
-            const attempt = await signUp.verifications.verifyEmailCode({
-                code,
+            const attempt = await signUp.attemptEmailAddressVerification({
+                code: trimmedCode,
             });
 
             if (attempt.status === "complete") {
