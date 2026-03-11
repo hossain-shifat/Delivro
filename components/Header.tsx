@@ -15,16 +15,21 @@ export default function Header({
 }: HeaderProps) {
     const router = useRouter();
     const { itemCount } = { itemCount: 6 };
+    const handleBack = React.useCallback(() => {
+        if (router.canGoBack()) {
+            router.back();
+            return;
+        }
+
+        router.replace("/");
+    }, [router]);
 
     return (
         <View className="flex-row items-center justify-between px-4 py-3 bg-white">
             {/* left side */}
             <View className="flex-row items-center flex-1">
                 {showBack && (
-                    <TouchableOpacity
-                        onPress={() => router.back()}
-                        className="mr-3"
-                    >
+                    <TouchableOpacity onPress={handleBack} className="mr-3">
                         <Ionicons
                             name="arrow-back"
                             size={24}

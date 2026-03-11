@@ -9,9 +9,9 @@ import { COLORS, PROFILE_MENU } from "@/constants";
 import { useClerk } from "@clerk/expo";
 
 export default function Profile() {
-    const { user } = { user: dummyUser };
+    const { user, signOut } = useClerk();
     const router = useRouter();
-    const { signOut } = useClerk();
+
     const handleLogout = async () => {
         await signOut();
         router.replace("/(auth)/sign-in");
