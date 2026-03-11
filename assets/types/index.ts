@@ -50,7 +50,12 @@ export interface IOrder extends Document {
     paymentMethod: "cash" | "stripe";
     paymentStatus: "pending" | "paid" | "failed" | "refunded";
     paymentIntentId?: string;
-    orderStatus: "placed" | "processing" | "shipped" | "delivered" | "cancelled";
+    orderStatus:
+        | "placed"
+        | "processing"
+        | "shipped"
+        | "delivered"
+        | "cancelled";
     subtotal: number;
     shippingCost: number;
     tax: number;

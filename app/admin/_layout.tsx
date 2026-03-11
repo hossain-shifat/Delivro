@@ -6,7 +6,7 @@ import { COLORS } from "@/constants";
 import { dummyUser } from "@/assets/assets";
 
 export default function AdminLayout() {
-    const { user } = { user: dummyUser }
+    const { user } = { user: dummyUser };
     const isLoaded = true;
     const router = useRouter();
 
@@ -44,8 +44,14 @@ export default function AdminLayout() {
                         onPress={() => router.replace("/(tabs)")}
                         className="mr-4 flex-row items-center"
                     >
-                        <Ionicons name="log-out-outline" size={24} color={COLORS.primary} />
-                        <Text className="ml-1 text-primary font-medium">Exit</Text>
+                        <Ionicons
+                            name="log-out-outline"
+                            size={24}
+                            color={COLORS.primary}
+                        />
+                        <Text className="ml-1 text-primary font-medium">
+                            Exit
+                        </Text>
                     </TouchableOpacity>
                 ),
             }}
@@ -55,8 +61,12 @@ export default function AdminLayout() {
                 options={{
                     title: "Dashboard",
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="grid-outline" size={size} color={color} />
-                    )
+                        <Ionicons
+                            name="grid-outline"
+                            size={size}
+                            color={color}
+                        />
+                    ),
                 }}
             />
             <Tabs.Screen
@@ -64,8 +74,12 @@ export default function AdminLayout() {
                 options={{
                     title: "Products",
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="cube-outline" size={size} color={color} />
-                    )
+                        <Ionicons
+                            name="cube-outline"
+                            size={size}
+                            color={color}
+                        />
+                    ),
                 }}
             />
             <Tabs.Screen
@@ -73,8 +87,12 @@ export default function AdminLayout() {
                 options={{
                     title: "Orders",
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="receipt-outline" size={size} color={color} />
-                    )
+                        <Ionicons
+                            name="receipt-outline"
+                            size={size}
+                            color={color}
+                        />
+                    ),
                 }}
             />
         </Tabs>
