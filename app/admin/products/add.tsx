@@ -17,8 +17,14 @@ import Toast from "react-native-toast-message";
 import { COLORS, CATEGORIES } from "@/constants";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
+import { useAuth } from "@clerk/expo";
+import api from "@/constants/api";
 
 export default function AddProduct() {
+    const router = useRouter();
+    const { getToken } = useAuth();
+
     const [submitting, setSubmitting] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -49,13 +55,96 @@ export default function AddProduct() {
 
     // Add Product
     const handleSubmit = async () => {
-        if (!name || !price || !category || sizes.length < 1) {
+        if (!name || !price || !category || !description || sizes.length < 1) {
             Toast.show({
                 type: "error",
                 text1: "Missing Fields",
                 text2: "Please fill in all required fields",
             });
             return;
+        }
+        if (images.length === 0) {
+            Toast.show({
+                type: "error",
+                text1: "Missing Image",
+                text2: "Please select at least one image",
+            });
+            return;
+        }
+
+        try {
+            setSubmitting(true);
+            const token = await getToken();
+
+            // Step 1: Upload images directly to Cloudinary
+            const uploadedUrls = await Promise.all(
+                images.map(async (uri) => {
+                    const formData = new FormData();
+                    formData.append("file", {
+                        uri,
+                        name: "image.jpg",
+                        type: "image/jpeg",
+                    } as any);
+                    formData.append("upload_preset", "Delivro");
+                    formData.append("folder", "delivro/products");
+
+                    const res = await fetch(
+                        "https://api.cloudinary.com/v1_1/dloasgoaj/image/upload",
+                        { method: "POST", body: formData },
+                    );
+                    const data = await res.json();
+
+                    if (!data.secure_url) {
+                        console.error("Cloudinary error:", data);
+                        throw new Error(
+                            data.error?.message || "Cloudinary upload failed",
+                        );
+                    }
+
+                    return data.secure_url;
+                }),
+            );
+
+            // Step 2: Send product data + cloudinary URLs to your server
+            const { data } = await api.post(
+                "/products",
+                {
+                    name,
+                    description,
+                    price,
+                    stock: stock || "0",
+                    category,
+                    isFeatured: String(isFeatured),
+                    sizes,
+                    images: uploadedUrls,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
+
+            if (!data?.success) throw new Error("Upload failed");
+            Toast.show({
+                type: "success",
+                text1: "Success",
+                text2: "Product created",
+            });
+            router.replace("/admin/products");
+        } catch (error: any) {
+            console.error(error);
+            Toast.show({
+                type: "error",
+                text1: "Failed to Create Product",
+                text2:
+                    error.response?.data?.message ||
+                    error.message ||
+                    "Something went wrong",
+            });
+        } finally {
+            setSubmitting(false);
         }
     };
 

@@ -8,7 +8,6 @@ import {
     RefreshControl,
 } from "react-native";
 import { COLORS, getStatusColor } from "@/constants";
-import { dummyAdminStats } from "@/assets/assets";
 import { useAuth } from "@clerk/expo";
 import api from "@/constants/api";
 
