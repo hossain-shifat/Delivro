@@ -4,6 +4,7 @@ import { HeaderProps } from "@/constants/types";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants";
 import { useRouter } from "expo-router";
+import { useCart } from "@/context/CartContext";
 
 export default function Header({
     title,
@@ -14,7 +15,9 @@ export default function Header({
     showLogo,
 }: HeaderProps) {
     const router = useRouter();
-    const { itemCount } = { itemCount: 6 };
+
+    const { itemCount } = useCart();
+
     const handleBack = React.useCallback(() => {
         if (router.canGoBack()) {
             router.back();
