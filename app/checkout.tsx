@@ -15,9 +15,12 @@ import { dummyAddress } from "@/assets/assets";
 import Toast from "react-native-toast-message";
 import { COLORS } from "@/constants";
 import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "@clerk/expo";
+import api from "@/constants/api";
 
 export default function Checkout() {
-    const { cartTotal } = useCart();
+    const { getToken } = useAuth();
+    const { cartTotal, clearCart } = useCart();
     const router = useRouter();
 
     const [loading, setLoading] = useState(false);
@@ -35,13 +38,31 @@ export default function Checkout() {
     const total = cartTotal + shipping + tax;
 
     const fetchAddress = async () => {
-        const addrList = dummyAddress;
-        if (addrList.length > 0) {
-            // find defauld address
-            const def = addrList.find((a: any) => a.isDefault) || addrList[0];
-            setSelectedAddress(def as Address);
+        try {
+            const token = await getToken();
+            if (!token) {
+                throw new Error("Missing auth token");
+            }
+            const { data } = await api.get("/addresses", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const addrList = data.data;
+            if (addrList.length > 0) {
+                // find default or first
+                const def =
+                    addrList.find((a: Address) => a.isDefault) || addrList[0];
+                setSelectedAddress(def);
+            }
+        } catch (error) {
+            console.error("Error fetching checkout data:", error);
+            Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "Failed to load checkout information",
+            });
+        } finally {
+            setPageLoading(false);
         }
-        setPageLoading(false);
     };
 
     const handlePlaceOrder = async () => {
@@ -61,7 +82,38 @@ export default function Checkout() {
             });
         }
         // cash on delivery
-        router.replace("/orders");
+        setLoading(true);
+        try {
+            const payload = {
+                shippingAddress: selectedAddress,
+                notes: "Placed via app",
+                paymentMethod,
+            };
+            const token = await getToken();
+            if (!token) {
+                throw new Error("Missing auth token");
+            }
+            const { data } = await api.post("/orders", payload, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            await clearCart();
+            Toast.show({
+                type: "success",
+                text1: "Order Placed",
+                text2: "Your order has been placed successfully!",
+            });
+            router.replace("/orders");
+        } catch (error: any) {
+            console.log(error);
+            Toast.show({
+                type: "error",
+                text1: "Failed to Place Order",
+                text2: error.response?.data?.message || "Something went wrong",
+            });
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
