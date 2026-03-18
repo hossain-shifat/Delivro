@@ -11,7 +11,6 @@ import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
 import { Address } from "@/constants/types";
-import { dummyAddress } from "@/assets/assets";
 import Toast from "react-native-toast-message";
 import { COLORS } from "@/constants";
 import { Ionicons } from "@expo/vector-icons";
