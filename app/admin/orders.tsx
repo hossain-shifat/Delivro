@@ -38,7 +38,7 @@ export default function AdminOrders() {
     const fetchOrders = async () => {
         try {
             const token = await getToken();
-            const data = await api.get("/order/admin/all", {
+            const { data } = await api.get("/orders/admin/all", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -47,8 +47,8 @@ export default function AdminOrders() {
                 setOrders(data.data);
             }
         } catch (error) {
-            console.error("Failed to fetch otders:", error);
-            Alert.alert("Error", "Failed to load otders");
+            console.error("Failed to fetch orders:", error);
+            Alert.alert("Error", "Failed to load orders");
         } finally {
             setLoading(false);
             setRefreshing(false);

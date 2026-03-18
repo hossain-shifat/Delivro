@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "@/components/Header";
 import { COLORS, getStatusColor } from "@/constants";
 import type { Order } from "@/constants/types";
-import { dummyOrders, formatDate } from "@/assets/assets";
+import { formatDate } from "@/assets/assets";
 import { useAuth } from "@clerk/expo";
 import api from "@/constants/api";
 
@@ -147,7 +147,6 @@ export default function Orders() {
                                     );
                                 })}
                             </ScrollView>
-
                             <View className="flex-row justify-between items-center mt-2 pt-3 border-t border-gray-100">
                                 <Text className="text-secondary">
                                     Items: {item.items.length}
