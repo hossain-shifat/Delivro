@@ -7,7 +7,7 @@
         "icon": "./assets/images/icon.png",
         "scheme": "client",
         "userInterfaceStyle": "automatic",
-        "newArchEnabled": true,
+        "newArchEnabled": false,
         "ios": {
             "supportsTablet": true,
             "bundleIdentifier": "com.hossainshifatsorganization.delivro",
@@ -59,6 +59,18 @@
                         "colors": {
                             "cropToolbarColor": "#000000"
                         }
+                    }
+                }
+            ],
+            "expo-secure-store",
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "newArchEnabled": false
+                    },
+                    "ios": {
+                        "newArchEnabled": false
                     }
                 }
             ]
