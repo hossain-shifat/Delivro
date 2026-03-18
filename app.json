@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "client",
-    "slug": "client",
+    "slug": "delivro",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hossainshifatsorganization.delivro",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +23,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.hossainshifatsorganization.delivro"
     },
     "web": {
       "output": "static",
@@ -43,23 +51,29 @@
       [
         "expo-image-picker",
         {
-            "photosPermission": "The app accesses your photos to let you share them with your friends.","colors": {
-                "cropToolbarColor": "#000000"
-            },
-            "dark": {
-                "colors": {
-                    "cropToolbarColor": "#000000"
-                }
+          "photosPermission": "The app accesses your photos to let you share them with your friends.",
+          "colors": {
+            "cropToolbarColor": "#000000"
+          },
+          "dark": {
+            "colors": {
+              "cropToolbarColor": "#000000"
             }
+          }
         }
-    ]
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
     "extra": {
-      "apiUrl": "http://192.168.0.159:3000/api"
-    }
+      "apiUrl": "http://192.168.0.159:3000/api",
+      "router": {},
+      "eas": {
+        "projectId": "f9da4dac-6f55-429c-8f89-0745b8be26c9"
+      }
+    },
+    "owner": "hossain-shifats-organization"
   }
 }
